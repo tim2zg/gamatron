@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "engine-core",
+    "tracer",
+    "storage",
+    "emulator",
+    "mcp-server",
+]
+resolver = "2"
