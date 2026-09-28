@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+emulator = { version = "0.1.0", path = "../emulator" }
+storage = { version = "0.1.0", path = "../storage" }
+tracer = { version = "0.1.0", path = "../tracer" }

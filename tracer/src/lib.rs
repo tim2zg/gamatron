@@ -1,3 +1,5 @@
+use crossbeam_queue::ArrayQueue;
+
 #[derive(Debug, Clone)]
 pub struct RegisterState {
     pub registers: [u64; 32], // Simplified generic register array
@@ -11,9 +13,24 @@ pub struct BlockTraceEvent {
     pub register_state: RegisterState,
 }
 
-pub trait LockFreeRingBuffer {
-    fn push(&mut self, event: BlockTraceEvent) -> Result<(), &'static str>;
-    fn pop(&mut self) -> Option<BlockTraceEvent>;
+pub struct LockFreeRingBuffer {
+    queue: ArrayQueue<BlockTraceEvent>,
+}
+
+impl LockFreeRingBuffer {
+    pub fn new(capacity: usize) -> Self {
+        Self {
+            queue: ArrayQueue::new(capacity),
+        }
+    }
+
+    pub fn push(&self, event: BlockTraceEvent) -> Result<(), &'static str> {
+        self.queue.push(event).map_err(|_| "Queue is full")
+    }
+
+    pub fn pop(&self) -> Option<BlockTraceEvent> {
+        self.queue.pop()
+    }
 }
 
 /// Placeholder for the Frida CModule agent wrapper
